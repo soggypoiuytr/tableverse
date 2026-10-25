@@ -17,3 +17,9 @@ Código em server/. Configure as variáveis de server/.env.example somente no am
 ## Conteúdo
 
 Imagens, fontes e áudios utilizados no protótipo foram fornecidos para este projeto; a disponibilização do código não concede licença de uso sobre conteúdo de terceiros.
+
+## Cadastro remoto em teste
+
+O frontend agora usa uma conexão HTTPS temporária do Cloudflare Tunnel para alcançar o serviço privado no computador do responsável. O retorno Discord aponta para essa conexão e volta a https://soggypoiuytr.github.io/tableverse/. O serviço permite somente as origens do GitHub Pages e da prévia local.
+
+A conexão temporária só existe enquanto cloudflared e o servidor estiverem rodando; o endereço muda se o túnel for recriado. Para uso contínuo, configurar endereço fixo antes de reiniciar a conexão. O login por e-mail/senha permanece independente dessa conexão.
