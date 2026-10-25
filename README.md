@@ -25,3 +25,5 @@ O frontend agora usa uma conexão HTTPS temporária do Cloudflare Tunnel para al
 A conexão temporária só existe enquanto cloudflared e o servidor estiverem rodando; o endereço muda se o túnel for recriado. Para uso contínuo, configurar endereço fixo antes de reiniciar a conexão. O login por e-mail/senha permanece independente dessa conexão.
 
 O controle de volume geral fica ao lado do botão de som e afeta músicas e efeitos; a preferência é salva no navegador. Santa Helena fica oculta durante a aproximação e a entrada em outro universo.
+
+Jogadores no menu orbitam o olho; ao entrar em uma mesa, os avatares fazem uma transição até a órbita daquele universo. A presença no menu também é compartilhada pelo Firebase.
