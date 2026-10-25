@@ -8,7 +8,7 @@ O site está em docs/, publicado por GitHub Pages. Inclui menu, áudio, animaç�
 
 Contas que já concluíram o vínculo com Discord e criaram e-mail/senha entram diretamente pelo Firebase. O primeiro vínculo Discord depende do serviço privado: GitHub Pages não executa o servidor. A configuração atual desse serviço é local. Para cadastro remoto, será necessário um endereço público seguro e configurar o retorno OAuth correspondente.
 
-A presença ainda é uma demonstração entre abas do mesmo navegador; não representa sincronização entre dispositivos.
+A presença de jogadores usa Firebase Realtime Database entre dispositivos, com remoção de sessões desconectadas e deduplicação por conta em cada universo. As regras em database.rules.json exigem autenticação e limitam a escrita às sessões da própria conta.
 
 ## Servidor de cadastro
 
@@ -23,3 +23,5 @@ Imagens, fontes e áudios utilizados no protótipo foram fornecidos para este pr
 O frontend agora usa uma conexão HTTPS temporária do Cloudflare Tunnel para alcançar o serviço privado no computador do responsável. O retorno Discord aponta para essa conexão e volta a https://soggypoiuytr.github.io/tableverse/. O serviço permite somente as origens do GitHub Pages e da prévia local.
 
 A conexão temporária só existe enquanto cloudflared e o servidor estiverem rodando; o endereço muda se o túnel for recriado. Para uso contínuo, configurar endereço fixo antes de reiniciar a conexão. O login por e-mail/senha permanece independente dessa conexão.
+
+O controle de volume geral fica ao lado do botão de som e afeta músicas e efeitos; a preferência é salva no navegador. Santa Helena fica oculta durante a aproximação e a entrada em outro universo.
