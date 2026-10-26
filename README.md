@@ -27,3 +27,7 @@ A conexão temporária só existe enquanto cloudflared e o servidor estiverem ro
 O controle de volume geral fica ao lado do botão de som e afeta músicas e efeitos; a preferência é salva no navegador. Santa Helena fica oculta durante a aproximação e a entrada em outro universo.
 
 Jogadores no menu orbitam o olho; ao entrar em uma mesa, os avatares fazem uma transição até a órbita daquele universo. A presença no menu também é compartilhada pelo Firebase.
+
+## Salas de RPG e menu Aurality
+
+As salas iniciam em espera e o mestre pode exibir ou recolher o mapa compartilhado. Fichas básicas e informações do universo usam Firebase com permissões por conta e mestre. O menu do Aurality inclui cenário em camadas, helicópteros com luz independente, ambientes e música balanceados, e lista de presença com destaque para o mestre. Ferramentas locais de simulação não acompanham o site publicado.
