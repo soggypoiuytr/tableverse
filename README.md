@@ -31,3 +31,7 @@ Jogadores no menu orbitam o olho; ao entrar em uma mesa, os avatares fazem uma t
 ## Salas de RPG e menu Aurality
 
 As salas iniciam em espera e o mestre pode exibir ou recolher o mapa compartilhado. Fichas básicas e informações do universo usam Firebase com permissões por conta e mestre. O menu do Aurality inclui cenário em camadas, helicópteros com luz independente, ambientes e música balanceados, e lista de presença com destaque para o mestre. Ferramentas locais de simulação não acompanham o site publicado.
+
+## Sistema Neural do Aurality
+
+A consulta de ficha abre um menu local em tela inteira, com fundo neural em três camadas, símbolo original, textos digitados e montagem rápida com leves glitches junto ao BIOS. O ambiente da ficha usa um trecho de seis minutos. A presença continua visível com efeitos de entrada e saída. Ao voltar à sala, o menu lateral repete sua animação e som. O mestre escolhe o mapa em painel próprio; a transição compartilhada usa carregamento com variações sonoras.
