@@ -591,6 +591,46 @@
             }
           }
         },
+        "mapRulers": {
+          ".read": "auth != null && $world === 'aurality'",
+          "$uid": {
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            ".validate": "newData.hasChildren(['ax','ay','bx','by','mapId','color','active','session','updatedAt'])",
+            "$other": {
+              ".validate": false
+            },
+            "color": {
+              ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+            },
+            ".write": "auth != null && $world === 'aurality' && auth.uid === $uid && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map'",
+            "bx": {
+              ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+            },
+            "mapId": {
+              ".validate": "newData.val() === 'concept-facility' || newData.val() === 'abandoned-complex'"
+            },
+            "by": {
+              ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+            },
+            "session": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "ax": {
+              ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+            },
+            "ay": {
+              ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+            },
+            "active": {
+              ".validate": "newData.isBoolean()"
+            },
+            "snapped": {
+              ".validate": "newData.isBoolean()"
+            }
+          }
+        },
         "gameplayEquipment": {
           ".read": "auth != null && $world === 'aurality'",
           "$token": {
@@ -625,6 +665,9 @@
             "$other": {
               ".validate": false
             },
+            "flashlightFlipX": {
+              ".validate": "newData.isBoolean()"
+            },
             ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).exists() && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).child('ownerUid').val() === auth.uid)",
             "flashlightAngle": {
               ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
@@ -632,8 +675,23 @@
             "katanaAngle": {
               ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
             },
+            "flashlightFlipY": {
+              ".validate": "newData.isBoolean()"
+            },
+            "glockFlipX": {
+              ".validate": "newData.isBoolean()"
+            },
             "glockX": {
               ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "katanaFlipX": {
+              ".validate": "newData.isBoolean()"
+            },
+            "glockFlipY": {
+              ".validate": "newData.isBoolean()"
+            },
+            "flashlightOn": {
+              ".validate": "newData.isBoolean()"
             },
             "updatedBy": {
               ".validate": "newData.val() === auth.uid"
@@ -641,20 +699,16 @@
             "glockAngle": {
               ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
             },
+            "katanaFlipY": {
+              ".validate": "newData.isBoolean()"
+            },
             "glockY": {
               ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
-            },
-            "flashlightOn": {
-              ".validate": "newData.isBoolean()"
             }
           }
         },
         "boardSettings": {
           ".read": "auth != null && $world === 'aurality'",
-          "gridEnabled": {
-            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid",
-            ".validate": "newData.isBoolean()"
-          },
           "$other": {
             ".validate": false
           },
@@ -673,8 +727,88 @@
             "tokenSize": {
               ".validate": "newData.isNumber() && newData.val() >= 20 && newData.val() <= 200 && newData.val()*1 % 1 === 0"
             },
+            "gridOpacity": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
+            },
+            "gridColor": {
+              ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+            },
             "gridSize": {
               ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 200 && newData.val()*1 % 1 === 0"
+            }
+          },
+          "gridEnabled": {
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid",
+            ".validate": "newData.isBoolean()"
+          },
+          "maps": {
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid",
+            "$map": {
+              ".validate": "($map === 'concept-facility' || $map === 'abandoned-complex') && newData.hasChildren(['appearance','gridEnabled'])",
+              "appearance": {
+                ".validate": "newData.hasChildren(['mapWidth','mapHeight','gridSize','tokenSize'])",
+                "mapWidth": {
+                  ".validate": "newData.isNumber() && newData.val() >= 200 && newData.val() <= 4000 && newData.val()*2 % 1 === 0"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "mapHeight": {
+                  ".validate": "newData.isNumber() && newData.val() >= 100 && newData.val() <= 4000 && newData.val()*2 % 1 === 0"
+                },
+                "tokenSize": {
+                  ".validate": "newData.isNumber() && newData.val() >= 20 && newData.val() <= 200 && newData.val()*1 % 1 === 0"
+                },
+                "gridOpacity": {
+                  ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
+                },
+                "gridColor": {
+                  ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+                },
+                "gridSize": {
+                  ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 200 && newData.val()*1 % 1 === 0"
+                }
+              },
+              "gridEnabled": {
+                ".validate": "newData.isBoolean()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          }
+        },
+        "customDiceRolls": {
+          ".read": "auth != null && $world === 'aurality'",
+          ".indexOn": [
+            "createdAt"
+          ],
+          "$roll": {
+            ".write": "auth != null && $world === 'aurality' && !data.exists() && newData.child('ownerUid').val() === auth.uid && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map'",
+            ".validate": "newData.hasChildren(['ownerUid','count','sides','values','result','createdAt'])",
+            "ownerUid": {
+              ".validate": "newData.val() === auth.uid"
+            },
+            "count": {
+              ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 100"
+            },
+            "sides": {
+              ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 1000000 && newData.val() !== 4 && newData.val() !== 6 && newData.val() !== 8 && newData.val() !== 10 && newData.val() !== 12 && newData.val() !== 20"
+            },
+            "result": {
+              ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= newData.parent().child('count').val() && newData.val() <= newData.parent().child('count').val()*newData.parent().child('sides').val()"
+            },
+            "values": {
+              ".validate": "newData.hasChildren(['0'])",
+              "$i": {
+                ".validate": "$i.matches(/^(0|[1-9][0-9]?)$/) && (($i === '0' && newData.parent().parent().child('count').val() > 0) || ($i === '1' && newData.parent().parent().child('count').val() > 1) || ($i === '2' && newData.parent().parent().child('count').val() > 2) || ($i === '3' && newData.parent().parent().child('count').val() > 3) || ($i === '4' && newData.parent().parent().child('count').val() > 4) || ($i === '5' && newData.parent().parent().child('count').val() > 5) || ($i === '6' && newData.parent().parent().child('count').val() > 6) || ($i === '7' && newData.parent().parent().child('count').val() > 7) || ($i === '8' && newData.parent().parent().child('count').val() > 8) || ($i === '9' && newData.parent().parent().child('count').val() > 9) || ($i === '10' && newData.parent().parent().child('count').val() > 10) || ($i === '11' && newData.parent().parent().child('count').val() > 11) || ($i === '12' && newData.parent().parent().child('count').val() > 12) || ($i === '13' && newData.parent().parent().child('count').val() > 13) || ($i === '14' && newData.parent().parent().child('count').val() > 14) || ($i === '15' && newData.parent().parent().child('count').val() > 15) || ($i === '16' && newData.parent().parent().child('count').val() > 16) || ($i === '17' && newData.parent().parent().child('count').val() > 17) || ($i === '18' && newData.parent().parent().child('count').val() > 18) || ($i === '19' && newData.parent().parent().child('count').val() > 19) || ($i === '20' && newData.parent().parent().child('count').val() > 20) || ($i === '21' && newData.parent().parent().child('count').val() > 21) || ($i === '22' && newData.parent().parent().child('count').val() > 22) || ($i === '23' && newData.parent().parent().child('count').val() > 23) || ($i === '24' && newData.parent().parent().child('count').val() > 24) || ($i === '25' && newData.parent().parent().child('count').val() > 25) || ($i === '26' && newData.parent().parent().child('count').val() > 26) || ($i === '27' && newData.parent().parent().child('count').val() > 27) || ($i === '28' && newData.parent().parent().child('count').val() > 28) || ($i === '29' && newData.parent().parent().child('count').val() > 29) || ($i === '30' && newData.parent().parent().child('count').val() > 30) || ($i === '31' && newData.parent().parent().child('count').val() > 31) || ($i === '32' && newData.parent().parent().child('count').val() > 32) || ($i === '33' && newData.parent().parent().child('count').val() > 33) || ($i === '34' && newData.parent().parent().child('count').val() > 34) || ($i === '35' && newData.parent().parent().child('count').val() > 35) || ($i === '36' && newData.parent().parent().child('count').val() > 36) || ($i === '37' && newData.parent().parent().child('count').val() > 37) || ($i === '38' && newData.parent().parent().child('count').val() > 38) || ($i === '39' && newData.parent().parent().child('count').val() > 39) || ($i === '40' && newData.parent().parent().child('count').val() > 40) || ($i === '41' && newData.parent().parent().child('count').val() > 41) || ($i === '42' && newData.parent().parent().child('count').val() > 42) || ($i === '43' && newData.parent().parent().child('count').val() > 43) || ($i === '44' && newData.parent().parent().child('count').val() > 44) || ($i === '45' && newData.parent().parent().child('count').val() > 45) || ($i === '46' && newData.parent().parent().child('count').val() > 46) || ($i === '47' && newData.parent().parent().child('count').val() > 47) || ($i === '48' && newData.parent().parent().child('count').val() > 48) || ($i === '49' && newData.parent().parent().child('count').val() > 49) || ($i === '50' && newData.parent().parent().child('count').val() > 50) || ($i === '51' && newData.parent().parent().child('count').val() > 51) || ($i === '52' && newData.parent().parent().child('count').val() > 52) || ($i === '53' && newData.parent().parent().child('count').val() > 53) || ($i === '54' && newData.parent().parent().child('count').val() > 54) || ($i === '55' && newData.parent().parent().child('count').val() > 55) || ($i === '56' && newData.parent().parent().child('count').val() > 56) || ($i === '57' && newData.parent().parent().child('count').val() > 57) || ($i === '58' && newData.parent().parent().child('count').val() > 58) || ($i === '59' && newData.parent().parent().child('count').val() > 59) || ($i === '60' && newData.parent().parent().child('count').val() > 60) || ($i === '61' && newData.parent().parent().child('count').val() > 61) || ($i === '62' && newData.parent().parent().child('count').val() > 62) || ($i === '63' && newData.parent().parent().child('count').val() > 63) || ($i === '64' && newData.parent().parent().child('count').val() > 64) || ($i === '65' && newData.parent().parent().child('count').val() > 65) || ($i === '66' && newData.parent().parent().child('count').val() > 66) || ($i === '67' && newData.parent().parent().child('count').val() > 67) || ($i === '68' && newData.parent().parent().child('count').val() > 68) || ($i === '69' && newData.parent().parent().child('count').val() > 69) || ($i === '70' && newData.parent().parent().child('count').val() > 70) || ($i === '71' && newData.parent().parent().child('count').val() > 71) || ($i === '72' && newData.parent().parent().child('count').val() > 72) || ($i === '73' && newData.parent().parent().child('count').val() > 73) || ($i === '74' && newData.parent().parent().child('count').val() > 74) || ($i === '75' && newData.parent().parent().child('count').val() > 75) || ($i === '76' && newData.parent().parent().child('count').val() > 76) || ($i === '77' && newData.parent().parent().child('count').val() > 77) || ($i === '78' && newData.parent().parent().child('count').val() > 78) || ($i === '79' && newData.parent().parent().child('count').val() > 79) || ($i === '80' && newData.parent().parent().child('count').val() > 80) || ($i === '81' && newData.parent().parent().child('count').val() > 81) || ($i === '82' && newData.parent().parent().child('count').val() > 82) || ($i === '83' && newData.parent().parent().child('count').val() > 83) || ($i === '84' && newData.parent().parent().child('count').val() > 84) || ($i === '85' && newData.parent().parent().child('count').val() > 85) || ($i === '86' && newData.parent().parent().child('count').val() > 86) || ($i === '87' && newData.parent().parent().child('count').val() > 87) || ($i === '88' && newData.parent().parent().child('count').val() > 88) || ($i === '89' && newData.parent().parent().child('count').val() > 89) || ($i === '90' && newData.parent().parent().child('count').val() > 90) || ($i === '91' && newData.parent().parent().child('count').val() > 91) || ($i === '92' && newData.parent().parent().child('count').val() > 92) || ($i === '93' && newData.parent().parent().child('count').val() > 93) || ($i === '94' && newData.parent().parent().child('count').val() > 94) || ($i === '95' && newData.parent().parent().child('count').val() > 95) || ($i === '96' && newData.parent().parent().child('count').val() > 96) || ($i === '97' && newData.parent().parent().child('count').val() > 97) || ($i === '98' && newData.parent().parent().child('count').val() > 98) || ($i === '99' && newData.parent().parent().child('count').val() > 99)) && newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= newData.parent().parent().child('sides').val()"
+              }
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            "$other": {
+              ".validate": false
             }
           }
         }

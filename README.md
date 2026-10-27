@@ -59,3 +59,13 @@ O mestre pode alternar entre Beco urbano e Complexo abandonado com carregamento 
 Cada personagem possui um inventário com peças organizáveis na grade e cinco slots de equipamento. Katana e Glock podem ser equipadas, movidas e giradas no token; a Glock possui três pentes de 17 balas. A lanterna usa o mesmo painel para equipar e guardar; quando equipada, clicar nela no token liga ou desliga a luz. Seu feixe acompanha a posição, rotação e espelhamento do personagem, com a revelação baseada na transparência da arte do feixe e bloqueada pelas paredes. Sons do mapa usam posicionamento espacial.
 
 O mestre controla iluminação dinâmica, luzes estáticas e paredes retangulares ou segmentos por mapa. O painel permite ajustar alcance, brilho, cor, opacidade final, suavidade e escuridão. Jogadores controlam somente os próprios equipamentos; o mestre pode controlar todos. A versão publicada exclui ferramentas de debug e credenciais privadas.
+
+## Ferramentas, régua e comandos de dados
+
+As ferramentas laterais usam grupos MESA e MESTRE com estilo consistente. Grade, iluminação, ajustes e troca de mapa ficam no grupo exclusivo do mestre. O painel de ajustes abre e fecha pelo mesmo botão; cada mapa guarda dimensões, tamanho e cor da grade, transparência, alinhamento e tamanho padrão dos tokens de forma independente.
+
+A régua acompanha o mouse enquanto o botão está pressionado e compartilha seta e medida entre os jogadores. Com a grade ligada, encaixa nas casas e informa a contagem de quadrados; sem grade, mede livremente. Pings compartilhados têm ondas animadas por JavaScript e permanecem visíveis sobre a escuridão.
+
+O chat aceita /r d20 e /r 2d6 pelo lançamento físico 3D com força escolhida pelo mouse. Dados personalizados, como /r d7 ou /r 2d100, usam aleatoriedade criptográfica sem viés de módulo e mostram o resultado compartilhado no chat. Comandos inválidos são rejeitados com mensagem explicativa.
+
+Itens podem ser espelhados de forma independente no controle do token, identificado por ícone e nome. Posição e rotação são enviadas durante o movimento, com atualizações limitadas e suavização nos outros clientes. Os slots podem ser reorganizados no painel rápido. A katana ficou maior e a lanterna possui animações de equipar e guardar; itens sem som próprio usam 35 variações do áudio padrão. A lanterna mantém controles separados de equipamento e energia, com lente iluminada e feixe mais amplo.
