@@ -31,6 +31,68 @@
     },
     "tableSessionsPreview": {
       "$world": {
+        "gameplayTokens": {
+          ".read": "auth != null && $world === 'aurality'",
+          "$token": {
+            "moveClient": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "x": {
+              ".validate": "newData.isNumber() && newData.val() >= 25 && newData.val() <= 975"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            "y": {
+              ".validate": "newData.isNumber() && newData.val() >= 25 && newData.val() <= 875"
+            },
+            ".validate": "newData.hasChildren(['ownerUid','x','y','updatedBy','updatedAt']) && newData.child('ownerUid').val() === data.child('ownerUid').val() && (root.child('tableSessionsPreview/aurality/boardSettings/gridEnabled').val() !== true || newData.child('gridBypass').val() === true || (newData.child('x').val() % 50 === 25 && newData.child('y').val() % 50 === 25))",
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && (data.child('ownerUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid) && data.exists() && newData.exists()",
+            "ownerUid": {
+              ".validate": "newData.val() === data.val()"
+            },
+            "gridBypass": {
+              ".validate": "newData.isBoolean()"
+            },
+            "updatedBy": {
+              ".validate": "newData.val() === auth.uid"
+            },
+            "moveSequence": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
+          }
+        },
+        "gameplaySheets": {
+          ".read": "auth != null && $world === 'aurality'",
+          "$character": {
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            "maxConcentration": {
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 9999"
+            },
+            ".validate": "newData.hasChildren(['life','maxLife','concentration','maxConcentration','updatedBy','updatedAt']) && newData.child('life').val() <= newData.child('maxLife').val() && newData.child('concentration').val() <= newData.child('maxConcentration').val()",
+            "concentration": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 9999"
+            },
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && $world === 'aurality' && data.exists() && newData.exists() && (root.child('tableSessionsPreview/aurality/gameplayTokens').child($character).child('ownerUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid)",
+            "maxLife": {
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 9999"
+            },
+            "life": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 9999"
+            },
+            "updatedBy": {
+              ".validate": "newData.val() === auth.uid"
+            }
+          }
+        },
         "config": {
           "gmUid": {
             ".write": false
@@ -44,20 +106,51 @@
           },
           ".read": "auth != null"
         },
+        "cursors": {
+          ".read": "auth != null && $world === 'aurality'",
+          "$uid": {
+            "$session": {
+              "x": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+              },
+              "name": {
+                ".validate": "newData.isString() && newData.val().length <= 32"
+              },
+              "updatedAt": {
+                ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+              },
+              "y": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 900"
+              },
+              ".validate": "newData.hasChildren(['x','y','name','photoURL','frameColor','updatedAt'])",
+              "$other": {
+                ".validate": false
+              },
+              ".write": "auth != null && $world === 'aurality' && auth.uid === $uid",
+              "photoURL": {
+                ".validate": "newData.isString() && newData.val().length <= 300 && (newData.val() === '' || newData.val().beginsWith('https://cdn.discordapp.com/'))"
+              },
+              "frameColor": {
+                ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+              }
+            }
+          }
+        },
         "scene": {
-          ".write": "auth != null && root.child('tableSessionsPreview').child($world).child('config/gmUid').val() === auth.uid",
-          ".validate": "newData.hasChildren(['mode','mapId','updatedBy','updatedAt'])",
-          "mode": {
-            ".validate": "newData.val() === 'waiting' || newData.val() === 'map'"
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
           },
+          ".read": "auth != null",
+          ".validate": "newData.hasChildren(['mode','mapId','updatedBy','updatedAt'])",
+          "$other": {
+            ".validate": false
+          },
+          ".write": "auth != null && root.child('tableSessionsPreview').child($world).child('config/gmUid').val() === auth.uid",
           "mapId": {
             ".validate": "newData.val() === 'concept-facility'"
           },
-          "updatedBy": {
-            ".validate": "newData.val() === auth.uid"
-          },
-          "updatedAt": {
-            ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+          "mode": {
+            ".validate": "newData.val() === 'waiting' || newData.val() === 'map'"
           },
           "tokens": {
             "$token": {
@@ -73,32 +166,41 @@
               }
             }
           },
-          "$other": {
-            ".validate": false
-          },
-          ".read": "auth != null"
+          "updatedBy": {
+            ".validate": "newData.val() === auth.uid"
+          }
         },
         "sheets": {
           ".read": false,
           "$uid": {
-            ".read": "auth != null && (auth.uid === $uid || auth != null && root.child('tableSessionsPreview').child($world).child('config/gmUid').val() === auth.uid)",
-            ".write": "auth != null && auth.uid === $uid",
-            ".validate": "newData.hasChildren(['name','concept','notes','updatedAt'])",
             "name": {
               ".validate": "newData.isString() && newData.val().length <= 80"
             },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            ".read": "auth != null && (auth.uid === $uid || auth != null && root.child('tableSessionsPreview').child($world).child('config/gmUid').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['name','concept','notes','updatedAt'])",
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && auth.uid === $uid",
             "concept": {
               ".validate": "newData.isString() && newData.val().length <= 200"
             },
             "notes": {
               ".validate": "newData.isString() && newData.val().length <= 12000"
-            },
-            "updatedAt": {
-              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
-            },
-            "$other": {
-              ".validate": false
             }
+          }
+        },
+        "boardSettings": {
+          ".read": "auth != null && $world === 'aurality'",
+          "gridEnabled": {
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid",
+            ".validate": "newData.isBoolean()"
+          },
+          "$other": {
+            ".validate": false
           }
         }
       }

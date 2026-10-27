@@ -35,3 +35,11 @@ As salas iniciam em espera e o mestre pode exibir ou recolher o mapa compartilha
 ## Sistema Neural do Aurality
 
 A consulta de ficha abre um menu local em tela inteira, com fundo neural em três camadas, símbolo original, textos digitados e montagem rápida com leves glitches junto ao BIOS. O ambiente da ficha usa um trecho de seis minutos. A presença continua visível com efeitos de entrada e saída. Ao voltar à sala, o menu lateral repete sua animação e som. O mestre escolhe o mapa em painel próprio; a transição compartilhada usa carregamento com variações sonoras.
+
+## Teste compartilhado de gameplay
+
+O mapa do Aurality inclui tokens vinculados aos três jogadores de teste, movimento sincronizado com resposta local imediata, barras de vida ligadas à ficha salva do Sistema Neural e acesso direto à ficha pelo mapa. O mestre move todos os tokens; cada jogador move seu próprio personagem.
+
+O grid é compartilhado e controlado pelo mestre. Quando ligado, alinha os tokens às casas; Alt permite movimento livre. Cursores dos outros jogadores mostram foto e moldura d20 na cor escolhida, com atualizações limitadas a cinco por segundo, limpeza ao desconectar e expiração visual por inatividade.
+
+Nesta fase de testes, as três contas vinculadas estão no nível 5, com orçamento total de 15 pontos. Novas fichas também iniciam no nível 5 temporariamente. A publicação não inclui os controles de debug da prévia local. Chat, rolagens e iniciativa ainda são ferramentas de conceito e não fazem parte da sincronização desta etapa.
