@@ -42,4 +42,12 @@ O mapa do Aurality inclui tokens vinculados aos três jogadores de teste, movime
 
 O grid é compartilhado e controlado pelo mestre. Quando ligado, alinha os tokens às casas; Alt permite movimento livre. Cursores dos outros jogadores mostram foto e moldura d20 na cor escolhida, com atualizações limitadas a cinco por segundo, limpeza ao desconectar e expiração visual por inatividade.
 
-Nesta fase de testes, as três contas vinculadas estão no nível 5, com orçamento total de 15 pontos. Novas fichas também iniciam no nível 5 temporariamente. A publicação não inclui os controles de debug da prévia local. Chat, rolagens e iniciativa ainda são ferramentas de conceito e não fazem parte da sincronização desta etapa.
+Nesta fase de testes, as três contas vinculadas estão no nível 5, com orçamento total de 15 pontos. Novas fichas também iniciam no nível 5 temporariamente. A publicação não inclui os controles de debug da prévia local. Chat, iniciativa e comandos de rolagem digitados permanecem ferramentas de conceito. As rolagens pelos botões de dados físicos são compartilhadas entre jogadores.
+
+## Controles dos tokens e dados físicos
+
+O botão direito abre um painel junto ao token. Jogadores podem espelhar seu próprio token; somente o mestre altera manualmente vida e concentração atuais. As duas barras refletem os máximos da ficha neural, permitem overheal sinalizado com + e preservam o excedente ao atualizar os atributos. Segurar o clique por um segundo, sem arrastar, publica um ping compartilhado.
+
+Os botões de dados lançam de 1 a 6 sólidos físicos simultâneos (d4, d6, d8, d10, d12 e d20), com colisões e resultados lidos após a simulação. A rolagem compartilha o estado inicial e os resultados individuais; dados dos jogadores saem dos seus tokens, enquanto o mestre mantém o lançamento de mesa. A cor acompanha a moldura do jogador. O d20 tem yin-yang preto e vermelho atrás do número 20 e brilho ao obter 20 natural. Há um único som no primeiro impacto com a mesa por lançamento.
+
+Renderização: Three.js 0.158.0. Física: cannon-es 0.20.0. Bibliotecas embarcadas na página para evitar dependência de CDN em execução; licenças e amostras de áudio em docs/assets/dice-physics/.

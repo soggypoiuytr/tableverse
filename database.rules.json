@@ -51,6 +51,9 @@
               ".validate": false
             },
             ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && (data.child('ownerUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid) && data.exists() && newData.exists()",
+            "flipX": {
+              ".validate": "newData.isBoolean()"
+            },
             "ownerUid": {
               ".validate": "newData.val() === data.val()"
             },
@@ -62,6 +65,34 @@
             },
             "moveSequence": {
               ".validate": "newData.isNumber() && newData.val() >= 0"
+            },
+            "flipY": {
+              ".validate": "newData.isBoolean()"
+            }
+          }
+        },
+        "mapPings": {
+          ".read": "auth != null && $world === 'aurality'",
+          "$uid": {
+            "x": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            "y": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 900"
+            },
+            ".validate": "newData.hasChildren(['x','y','frameColor','sequence','updatedAt'])",
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && $world === 'aurality' && auth.uid === $uid && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map'",
+            "sequence": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "frameColor": {
+              ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
             }
           }
         },
@@ -74,7 +105,7 @@
             "maxConcentration": {
               ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 9999"
             },
-            ".validate": "newData.hasChildren(['life','maxLife','concentration','maxConcentration','updatedBy','updatedAt']) && newData.child('life').val() <= newData.child('maxLife').val() && newData.child('concentration').val() <= newData.child('maxConcentration').val()",
+            ".validate": "newData.hasChildren(['life','maxLife','concentration','maxConcentration','updatedBy','updatedAt']) && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || (newData.child('life').val() === ((newData.child('maxLife').val() - (data.child('maxLife').val() - data.child('life').val())) < 0 ? 0 : (newData.child('maxLife').val() - (data.child('maxLife').val() - data.child('life').val()))) && newData.child('concentration').val() === ((newData.child('maxConcentration').val() - (data.child('maxConcentration').val() - data.child('concentration').val())) < 0 ? 0 : (newData.child('maxConcentration').val() - (data.child('maxConcentration').val() - data.child('concentration').val())))))",
             "concentration": {
               ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 9999"
             },
@@ -190,6 +221,54 @@
             },
             "notes": {
               ".validate": "newData.isString() && newData.val().length <= 12000"
+            }
+          }
+        },
+        "physicalDice": {
+          ".read": "auth != null && $world === 'aurality'",
+          "current": {
+            "count": {
+              ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 6"
+            },
+            "originX": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+            },
+            "seed": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295"
+            },
+            "result": {
+              ".validate": "newData.isNumber()"
+            },
+            ".validate": "newData.hasChildren(['id','ownerUid','sides','count','dieColor','seed','createdAt','result']) && (newData.child('result').val() === -1 || (newData.child('result').val() >= 0 && newData.child('result').val() <= newData.child('sides').val() * newData.child('count').val())) && newData.child('seed').val() % 1 === 0 && newData.child('result').val() % 1 === 0 && ((newData.child('id').val() === data.child('id').val() && newData.child('seed').val() === data.child('seed').val() && newData.child('sides').val() === data.child('sides').val() && newData.child('count').val() === data.child('count').val() && newData.child('dieColor').val() === data.child('dieColor').val() && newData.child('createdAt').val() === data.child('createdAt').val()) || (newData.child('id').val() !== data.child('id').val() && newData.child('result').val() === 0)) && (newData.child('result').val() === 0 || ((newData.child('count').val() === 1 && newData.child('values').hasChildren(['0'])) || (newData.child('count').val() === 2 && newData.child('values').hasChildren(['0','1'])) || (newData.child('count').val() === 3 && newData.child('values').hasChildren(['0','1','2'])) || (newData.child('count').val() === 4 && newData.child('values').hasChildren(['0','1','2','3'])) || (newData.child('count').val() === 5 && newData.child('values').hasChildren(['0','1','2','3','4'])) || (newData.child('count').val() === 6 && newData.child('values').hasChildren(['0','1','2','3','4','5'])))) && newData.hasChildren(['fromToken','originX','originY']) && (newData.child('id').val() !== data.child('id').val() || (newData.child('fromToken').val() === data.child('fromToken').val() && newData.child('originX').val() === data.child('originX').val() && newData.child('originY').val() === data.child('originY').val())) && (newData.child('fromToken').val() !== true || root.child('tableSessionsPreview/aurality/config/gmUid').val() !== auth.uid)",
+            "dieColor": {
+              ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+            },
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && newData.child('ownerUid').val() === auth.uid && ((!data.exists()) || (newData.child('id').val() === data.child('id').val() && data.child('ownerUid').val() === auth.uid) || data.child('result').val() !== 0 || now - data.child('createdAt').val() > 35000)",
+            "id": {
+              ".validate": "newData.isString() && newData.val().length <= 64"
+            },
+            "fromToken": {
+              ".validate": "newData.isBoolean()"
+            },
+            "ownerUid": {
+              ".validate": "newData.val() === auth.uid"
+            },
+            "sides": {
+              ".validate": "newData.val() === 4 || newData.val() === 6 || newData.val() === 8 || newData.val() === 10 || newData.val() === 12 || newData.val() === 20"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() <= now + 1000 && newData.val() >= now - 60000))"
+            },
+            "values": {
+              "$index": {
+                ".validate": "$index.matches(/^[0-5]$/) && newData.isNumber() && newData.val() % 1 === 0 && (newData.val() === -1 || (newData.val() >= 1 && newData.val() <= newData.parent().parent().child('sides').val()))"
+              }
+            },
+            "originY": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 900"
             }
           }
         },
