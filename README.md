@@ -48,6 +48,14 @@ Nesta fase de testes, as três contas vinculadas estão no nível 5, com orçame
 
 O botão direito abre um painel junto ao token. Jogadores podem espelhar seu próprio token; somente o mestre altera manualmente vida e concentração atuais. As duas barras refletem os máximos da ficha neural, permitem overheal sinalizado com + e preservam o excedente ao atualizar os atributos. Segurar o clique por um segundo, sem arrastar, publica um ping compartilhado.
 
-Os botões de dados lançam de 1 a 6 sólidos físicos simultâneos (d4, d6, d8, d10, d12 e d20), com colisões e resultados lidos após a simulação. A rolagem compartilha o estado inicial e os resultados individuais; dados dos jogadores saem dos seus tokens, enquanto o mestre mantém o lançamento de mesa. A cor acompanha a moldura do jogador. O d20 tem yin-yang preto e vermelho atrás do número 20 e brilho ao obter 20 natural. Há um único som no primeiro impacto com a mesa por lançamento.
+Os botões de dados lançam de 1 a 6 sólidos físicos simultâneos (d4, d6, d8, d10, d12 e d20), com colisões e resultados lidos após a simulação. A rolagem compartilha o estado inicial e os resultados individuais; dados dos jogadores saem dos seus tokens, enquanto o mestre escolhe o ponto de lançamento na região visível do mapa. A força e a direção são definidas com o mouse. A cor acompanha a moldura do jogador. O 20 brilha em amarelo; o 1 usa vermelho e a fonte de Segunda Rocha. Ambos têm efeitos e sons próprios. Há um único som no primeiro impacto com a mesa por lançamento.
 
 Renderização: Three.js 0.158.0. Física: cannon-es 0.20.0. Bibliotecas embarcadas na página para evitar dependência de CDN em execução; licenças e amostras de áudio em docs/assets/dice-physics/.
+
+## Mapas, inventário e iluminação
+
+O mestre pode alternar entre Beco urbano e Complexo abandonado com carregamento compartilhado. Dimensões do mapa, tamanho da grade e tamanho dos tokens são ajustáveis. Dados aceitam um atributo da ficha salva: o bônus aparece após a rolagem, com contagem animada e som sincronizado. As rolagens de diferentes jogadores podem acontecer ao mesmo tempo.
+
+Cada personagem possui um inventário com peças organizáveis na grade e cinco slots de equipamento. Katana e Glock podem ser equipadas, movidas e giradas no token; a Glock possui três pentes de 17 balas. A lanterna usa o mesmo painel para equipar e guardar; quando equipada, clicar nela no token liga ou desliga a luz. Seu feixe acompanha a posição, rotação e espelhamento do personagem, com a revelação baseada na transparência da arte do feixe e bloqueada pelas paredes. Sons do mapa usam posicionamento espacial.
+
+O mestre controla iluminação dinâmica, luzes estáticas e paredes retangulares ou segmentos por mapa. O painel permite ajustar alcance, brilho, cor, opacidade final, suavidade e escuridão. Jogadores controlam somente os próprios equipamentos; o mestre pode controlar todos. A versão publicada exclui ferramentas de debug e credenciais privadas.

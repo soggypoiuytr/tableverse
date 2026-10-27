@@ -38,19 +38,25 @@
               ".validate": "newData.isString() && newData.val().length <= 64"
             },
             "x": {
-              ".validate": "newData.isNumber() && newData.val() >= 25 && newData.val() <= 975"
+              ".validate": "newData.isNumber() && newData.val() >= 500-(newData.parent().parent().parent().child('boardSettings/appearance/mapWidth').exists() ? newData.parent().parent().parent().child('boardSettings/appearance/mapWidth').val() : 1000)/2 && newData.val() <= 500+(newData.parent().parent().parent().child('boardSettings/appearance/mapWidth').exists() ? newData.parent().parent().parent().child('boardSettings/appearance/mapWidth').val() : 1000)/2"
             },
             "updatedAt": {
               ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
             },
             "y": {
-              ".validate": "newData.isNumber() && newData.val() >= 25 && newData.val() <= 875"
+              ".validate": "newData.isNumber() && newData.val() >= 450-(newData.parent().parent().parent().child('boardSettings/appearance/mapHeight').exists() ? newData.parent().parent().parent().child('boardSettings/appearance/mapHeight').val() : 562.5)/2 && newData.val() <= 450+(newData.parent().parent().parent().child('boardSettings/appearance/mapHeight').exists() ? newData.parent().parent().parent().child('boardSettings/appearance/mapHeight').val() : 562.5)/2"
             },
-            ".validate": "newData.hasChildren(['ownerUid','x','y','updatedBy','updatedAt']) && newData.child('ownerUid').val() === data.child('ownerUid').val() && (root.child('tableSessionsPreview/aurality/boardSettings/gridEnabled').val() !== true || newData.child('gridBypass').val() === true || (newData.child('x').val() % 50 === 25 && newData.child('y').val() % 50 === 25))",
+            ".validate": "newData.hasChildren(['ownerUid','x','y','updatedBy','updatedAt']) && newData.child('ownerUid').val() === data.child('ownerUid').val() && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || newData.child('tokenSize').val() === data.child('tokenSize').val()) && (newData.parent().parent().child('boardSettings/gridEnabled').val() !== true || newData.child('gridBypass').val() === true || ((newData.child('x').val()-(500-(newData.parent().parent().child('boardSettings/appearance/mapWidth').exists() ? newData.parent().parent().child('boardSettings/appearance/mapWidth').val() : 1000)/2)) % (newData.parent().parent().child('boardSettings/appearance/gridSize').exists() ? newData.parent().parent().child('boardSettings/appearance/gridSize').val() : 50) === (newData.parent().parent().child('boardSettings/appearance/gridSize').exists() ? newData.parent().parent().child('boardSettings/appearance/gridSize').val() : 50)/2 && (newData.child('y').val()-(450-(newData.parent().parent().child('boardSettings/appearance/mapHeight').exists() ? newData.parent().parent().child('boardSettings/appearance/mapHeight').val() : 562.5)/2)) % (newData.parent().parent().child('boardSettings/appearance/gridSize').exists() ? newData.parent().parent().child('boardSettings/appearance/gridSize').val() : 50) === (newData.parent().parent().child('boardSettings/appearance/gridSize').exists() ? newData.parent().parent().child('boardSettings/appearance/gridSize').val() : 50)/2))",
+            "rotation": {
+              ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+            },
             "$other": {
               ".validate": false
             },
             ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && (data.child('ownerUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid) && data.exists() && newData.exists()",
+            "tokenSize": {
+              ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 20 && newData.val() <= 200 && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || newData.val() === data.val())"
+            },
             "flipX": {
               ".validate": "newData.isBoolean()"
             },
@@ -75,13 +81,13 @@
           ".read": "auth != null && $world === 'aurality'",
           "$uid": {
             "x": {
-              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+              ".validate": "newData.isNumber() && newData.val() >= 500-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2 && newData.val() <= 500+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2"
             },
             "updatedAt": {
               ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
             },
             "y": {
-              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 900"
+              ".validate": "newData.isNumber() && newData.val() >= 450-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2 && newData.val() <= 450+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2"
             },
             ".validate": "newData.hasChildren(['x','y','frameColor','sequence','updatedAt'])",
             "$other": {
@@ -94,6 +100,248 @@
             "frameColor": {
               ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
             }
+          }
+        },
+        "gameplayInventories": {
+          "$token": {
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            ".read": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).exists() && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).child('ownerUid').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['items','updatedBy','updatedAt'])",
+            "items": {
+              "magazine1": {
+                "x": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 7"
+                },
+                "y": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 3"
+                },
+                ".validate": "newData.hasChildren(['x','y','width','height','quickSlot','rounds'])",
+                "height": {
+                  ".validate": "newData.val() === 2"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "rounds": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 17"
+                },
+                "quickSlot": {
+                  ".validate": "newData.val() === 0"
+                },
+                "width": {
+                  ".validate": "newData.val() === 1"
+                }
+              },
+              "flashlight": {
+                "x": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 7"
+                },
+                "y": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 4"
+                },
+                ".validate": "newData.hasChildren(['x','y','width','height','quickSlot'])",
+                "height": {
+                  ".validate": "newData.val() === 1"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "quickSlot": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 5"
+                },
+                "width": {
+                  ".validate": "newData.val() === 1"
+                }
+              },
+              ".validate": "newData.hasChildren(['katana'])",
+              "katana": {
+                "x": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 7"
+                },
+                "y": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 4"
+                },
+                ".validate": "newData.hasChildren(['x','y','width','height','quickSlot'])",
+                "height": {
+                  ".validate": "newData.val() === 1"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "quickSlot": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 5"
+                },
+                "width": {
+                  ".validate": "newData.val() === 1"
+                }
+              },
+              "$other": {
+                ".validate": false
+              },
+              "magazine3": {
+                "x": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 7"
+                },
+                "y": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 3"
+                },
+                ".validate": "newData.hasChildren(['x','y','width','height','quickSlot','rounds'])",
+                "height": {
+                  ".validate": "newData.val() === 2"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "rounds": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 17"
+                },
+                "quickSlot": {
+                  ".validate": "newData.val() === 0"
+                },
+                "width": {
+                  ".validate": "newData.val() === 1"
+                }
+              },
+              "glock": {
+                "x": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 6"
+                },
+                "y": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 3"
+                },
+                ".validate": "newData.hasChildren(['x','y','width','height','quickSlot'])",
+                "height": {
+                  ".validate": "newData.val() === 2"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "quickSlot": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 5"
+                },
+                "width": {
+                  ".validate": "newData.val() === 2"
+                }
+              },
+              "magazine2": {
+                "x": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 7"
+                },
+                "y": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 3"
+                },
+                ".validate": "newData.hasChildren(['x','y','width','height','quickSlot','rounds'])",
+                "height": {
+                  ".validate": "newData.val() === 2"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "rounds": {
+                  ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 17"
+                },
+                "quickSlot": {
+                  ".validate": "newData.val() === 0"
+                },
+                "width": {
+                  ".validate": "newData.val() === 1"
+                }
+              }
+            },
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).exists() && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).child('ownerUid').val() === auth.uid)",
+            "updatedBy": {
+              ".validate": "newData.val() === auth.uid"
+            }
+          }
+        },
+        "lighting": {
+          ".read": "auth != null",
+          ".write": "auth != null && root.child('tableSessionsPreview').child($world).child('config/gmUid').val() === auth.uid",
+          "maps": {
+            "$map": {
+              "lights": {
+                "$light": {
+                  "x": {
+                    ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+                  },
+                  "y": {
+                    ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+                  },
+                  ".validate": "newData.hasChildren(['x','y','radius'])",
+                  "$other": {
+                    ".validate": false
+                  },
+                  "color": {
+                    ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+                  },
+                  "radius": {
+                    ".validate": "newData.isNumber() && newData.val() >= 20 && newData.val() <= 2000"
+                  },
+                  "edgeOpacity": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
+                  },
+                  "brightness": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
+                  },
+                  "softness": {
+                    ".validate": "newData.isNumber() && newData.val() >= .05 && newData.val() <= .95"
+                  }
+                }
+              },
+              "darkness": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1"
+              },
+              ".validate": "$map === 'concept-facility' || $map === 'abandoned-complex'",
+              "enabled": {
+                ".validate": "newData.isBoolean()"
+              },
+              "$other": {
+                ".validate": false
+              },
+              "walls": {
+                "$wall": {
+                  ".validate": "newData.hasChildren(['a','b'])",
+                  "a": {
+                    ".validate": "newData.hasChildren(['x','y'])",
+                    "x": {
+                      ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+                    },
+                    "y": {
+                      ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "$other": {
+                    ".validate": false
+                  },
+                  "b": {
+                    ".validate": "newData.hasChildren(['x','y'])",
+                    "x": {
+                      ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+                    },
+                    "y": {
+                      ".validate": "newData.isNumber() && newData.val() >= -10000 && newData.val() <= 10000"
+                    },
+                    "$other": {
+                      ".validate": false
+                    }
+                  },
+                  "shape": {
+                    ".validate": "newData.val() === 'rect'"
+                  }
+                }
+              }
+            }
+          },
+          "$other": {
+            ".validate": false
           }
         },
         "gameplaySheets": {
@@ -142,7 +390,7 @@
           "$uid": {
             "$session": {
               "x": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+                ".validate": "newData.isNumber() && newData.val() >= 500-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2 && newData.val() <= 500+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2"
               },
               "name": {
                 ".validate": "newData.isString() && newData.val().length <= 32"
@@ -151,7 +399,7 @@
                 ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
               },
               "y": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 900"
+                ".validate": "newData.isNumber() && newData.val() >= 450-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2 && newData.val() <= 450+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2"
               },
               ".validate": "newData.hasChildren(['x','y','name','photoURL','frameColor','updatedAt'])",
               "$other": {
@@ -178,7 +426,7 @@
           },
           ".write": "auth != null && root.child('tableSessionsPreview').child($world).child('config/gmUid').val() === auth.uid",
           "mapId": {
-            ".validate": "newData.val() === 'concept-facility'"
+            ".validate": "newData.val() === 'concept-facility' || newData.val() === 'abandoned-complex'"
           },
           "mode": {
             ".validate": "newData.val() === 'waiting' || newData.val() === 'map'"
@@ -231,7 +479,7 @@
               ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 6"
             },
             "originX": {
-              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+              ".validate": "newData.isNumber() && newData.val() >= 500-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2 && newData.val() <= 500+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2"
             },
             "seed": {
               ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295"
@@ -268,7 +516,136 @@
               }
             },
             "originY": {
-              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 900"
+              ".validate": "newData.isNumber() && newData.val() >= 450-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2 && newData.val() <= 450+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2"
+            }
+          },
+          "rolls": {
+            ".indexOn": [
+              "createdAt"
+            ],
+            "$rollId": {
+              "attributeKey": {
+                ".validate": "newData.val() === 'body' || newData.val() === 'mind' || newData.val() === 'reflex' || newData.val() === 'influence' || newData.val() === 'energy'"
+              },
+              "count": {
+                ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 1 && newData.val() <= 6"
+              },
+              "originX": {
+                ".validate": "newData.isNumber() && newData.val() >= 500-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2 && newData.val() <= 500+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapWidth').val() : 1000)/2"
+              },
+              "seed": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4294967295"
+              },
+              "throwY": {
+                ".validate": "newData.isNumber() && newData.val() >= -1 && newData.val() <= 1"
+              },
+              "result": {
+                ".validate": "newData.isNumber()"
+              },
+              ".validate": "newData.hasChildren(['id','ownerUid','sides','count','dieColor','seed','createdAt','result']) && (newData.child('result').val() === -1 || (newData.child('result').val() >= 0 && newData.child('result').val() <= newData.child('sides').val() * newData.child('count').val())) && newData.child('seed').val() % 1 === 0 && newData.child('result').val() % 1 === 0 && ((newData.child('id').val() === data.child('id').val() && newData.child('seed').val() === data.child('seed').val() && newData.child('sides').val() === data.child('sides').val() && newData.child('count').val() === data.child('count').val() && newData.child('dieColor').val() === data.child('dieColor').val() && newData.child('createdAt').val() === data.child('createdAt').val()) || (newData.child('id').val() !== data.child('id').val() && newData.child('result').val() === 0)) && (newData.child('result').val() === 0 || ((newData.child('count').val() === 1 && newData.child('values').hasChildren(['0'])) || (newData.child('count').val() === 2 && newData.child('values').hasChildren(['0','1'])) || (newData.child('count').val() === 3 && newData.child('values').hasChildren(['0','1','2'])) || (newData.child('count').val() === 4 && newData.child('values').hasChildren(['0','1','2','3'])) || (newData.child('count').val() === 5 && newData.child('values').hasChildren(['0','1','2','3','4'])) || (newData.child('count').val() === 6 && newData.child('values').hasChildren(['0','1','2','3','4','5'])))) && newData.hasChildren(['fromToken','originX','originY']) && (newData.child('id').val() !== data.child('id').val() || (newData.child('fromToken').val() === data.child('fromToken').val() && newData.child('originX').val() === data.child('originX').val() && newData.child('originY').val() === data.child('originY').val())) && (newData.child('fromToken').val() !== true || root.child('tableSessionsPreview/aurality/config/gmUid').val() !== auth.uid) && newData.child('id').val() === $rollId && (!newData.child('aimed').exists() || (newData.hasChildren(['throwPower','throwX','throwY','throwSpan']) && (newData.child('throwX').val()*newData.child('throwX').val()+newData.child('throwY').val()*newData.child('throwY').val() > 0.5) && (newData.child('throwX').val()*newData.child('throwX').val()+newData.child('throwY').val()*newData.child('throwY').val() <= 1.01) && (!data.exists() || (newData.child('aimed').val() === data.child('aimed').val() && newData.child('throwPower').val() === data.child('throwPower').val() && newData.child('throwX').val() === data.child('throwX').val() && newData.child('throwY').val() === data.child('throwY').val() && newData.child('throwSpan').val() === data.child('throwSpan').val())))) && ((!newData.child('attributeKey').exists() && !newData.child('attributeBonus').exists() && !data.child('attributeKey').exists()) || (newData.hasChildren(['attributeKey','attributeBonus']) && newData.child('count').val() === 1 && (!data.exists() || (newData.child('attributeKey').val() === data.child('attributeKey').val() && newData.child('attributeBonus').val() === data.child('attributeBonus').val()))))",
+              "throwPower": {
+                ".validate": "newData.isNumber() && newData.val() >= 0.15 && newData.val() <= 1"
+              },
+              "dieColor": {
+                ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)"
+              },
+              "$other": {
+                ".validate": false
+              },
+              ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && newData.child('ownerUid').val() === auth.uid && (!data.exists() || data.child('ownerUid').val() === auth.uid)",
+              "aimed": {
+                ".validate": "newData.val() === true"
+              },
+              "id": {
+                ".validate": "newData.isString() && newData.val().length <= 64"
+              },
+              "attributeBonus": {
+                ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 10"
+              },
+              "fromToken": {
+                ".validate": "newData.isBoolean()"
+              },
+              "ownerUid": {
+                ".validate": "newData.val() === auth.uid"
+              },
+              "sides": {
+                ".validate": "newData.val() === 4 || newData.val() === 6 || newData.val() === 8 || newData.val() === 10 || newData.val() === 12 || newData.val() === 20"
+              },
+              "createdAt": {
+                ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() <= now + 1000 && newData.val() >= now - 60000))"
+              },
+              "throwSpan": {
+                ".validate": "newData.isNumber() && newData.val() >= 0.8 && newData.val() <= 40"
+              },
+              "values": {
+                "$index": {
+                  ".validate": "$index.matches(/^[0-5]$/) && newData.isNumber() && newData.val() % 1 === 0 && (newData.val() === -1 || (newData.val() >= 1 && newData.val() <= newData.parent().parent().child('sides').val()))"
+                }
+              },
+              "originY": {
+                ".validate": "newData.isNumber() && newData.val() >= 450-(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2 && newData.val() <= 450+(root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').exists() ? root.child('tableSessionsPreview/aurality').child('boardSettings/appearance/mapHeight').val() : 562.5)/2"
+              },
+              "throwX": {
+                ".validate": "newData.isNumber() && newData.val() >= -1 && newData.val() <= 1"
+              }
+            }
+          }
+        },
+        "gameplayEquipment": {
+          ".read": "auth != null && $world === 'aurality'",
+          "$token": {
+            "katanaY": {
+              ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "flashlightEquipped": {
+              ".validate": "newData.isBoolean()"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 60000"
+            },
+            "katanaEquipped": {
+              ".validate": "newData.isBoolean()"
+            },
+            "flashlightX": {
+              ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "glockAmmoTotal": {
+              ".validate": "newData.isNumber() && newData.val() % 1 === 0 && newData.val() >= 0 && newData.val() <= 51"
+            },
+            ".validate": "newData.hasChildren(['katanaEquipped','updatedBy','updatedAt'])",
+            "flashlightY": {
+              ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "katanaX": {
+              ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "glockEquipped": {
+              ".validate": "newData.isBoolean()"
+            },
+            "$other": {
+              ".validate": false
+            },
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/scene/mode').val() === 'map' && root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).exists() && (root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid || root.child('tableSessionsPreview/aurality/gameplayTokens').child($token).child('ownerUid').val() === auth.uid)",
+            "flashlightAngle": {
+              ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+            },
+            "katanaAngle": {
+              ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+            },
+            "glockX": {
+              ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "updatedBy": {
+              ".validate": "newData.val() === auth.uid"
+            },
+            "glockAngle": {
+              ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+            },
+            "glockY": {
+              ".validate": "newData.isNumber() && newData.val() >= -120 && newData.val() <= 120"
+            },
+            "flashlightOn": {
+              ".validate": "newData.isBoolean()"
             }
           }
         },
@@ -280,6 +657,25 @@
           },
           "$other": {
             ".validate": false
+          },
+          "appearance": {
+            ".validate": "newData.hasChildren(['mapWidth','mapHeight','gridSize','tokenSize'])",
+            "mapWidth": {
+              ".validate": "newData.isNumber() && newData.val() >= 200 && newData.val() <= 4000 && newData.val()*2 % 1 === 0"
+            },
+            "$other": {
+              ".validate": false
+            },
+            "mapHeight": {
+              ".validate": "newData.isNumber() && newData.val() >= 100 && newData.val() <= 4000 && newData.val()*2 % 1 === 0"
+            },
+            ".write": "auth != null && $world === 'aurality' && root.child('tableSessionsPreview/aurality/config/gmUid').val() === auth.uid",
+            "tokenSize": {
+              ".validate": "newData.isNumber() && newData.val() >= 20 && newData.val() <= 200 && newData.val()*1 % 1 === 0"
+            },
+            "gridSize": {
+              ".validate": "newData.isNumber() && newData.val() >= 10 && newData.val() <= 200 && newData.val()*1 % 1 === 0"
+            }
           }
         }
       }
