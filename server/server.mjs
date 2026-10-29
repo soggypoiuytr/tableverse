@@ -3,11 +3,12 @@ import {randomBytes,timingSafeEqual} from 'node:crypto';
 import {initializeApp,cert} from 'firebase-admin/app';
 import {readFileSync} from 'node:fs';
 import {getAuth} from 'firebase-admin/auth';
+import {getDatabase} from 'firebase-admin/database';
 const config={client:process.env.DISCORD_CLIENT_ID,secret:process.env.DISCORD_CLIENT_SECRET,redirect:process.env.DISCORD_REDIRECT_URI,origin:process.env.TABLEVERSE_ORIGIN,project:process.env.FIREBASE_PROJECT_ID};
 for(const [key,value] of Object.entries(config))if(!value)throw new Error(`Configuração ausente: ${key}`);
 if(config.project!=='tableverse-78c7d')throw new Error('O projeto Firebase precisa ser o projeto exclusivo do Tableverse.');
 const callback=new URL(config.redirect),frontend=new URL(config.origin),origin=frontend.origin,returnTo=frontend.href,allowedOrigins=new Set([origin,'http://127.0.0.1:4177','http://localhost:4177']);
-const serviceAccount=JSON.parse(readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS,'utf8'));if(serviceAccount.project_id!==config.project)throw Error('Credencial Firebase pertence a outro projeto.');initializeApp({credential:cert(serviceAccount),projectId:config.project});
+const serviceAccount=JSON.parse(readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS,'utf8'));if(serviceAccount.project_id!==config.project)throw Error('Credencial Firebase pertence a outro projeto.');initializeApp({credential:cert(serviceAccount),projectId:config.project,databaseURL:'https://tableverse-78c7d-default-rtdb.firebaseio.com'});
 const auth=getAuth(),states=new Map(),sessions=new Map();
 const clean=setInterval(()=>{const now=Date.now();for(const map of [states,sessions])for(const [key,value]of map)if(value.expires<now)map.delete(key)},60000);clean.unref();
 const cookieName='tableverse_oauth';
@@ -37,6 +38,7 @@ const user=await discord('https://discord.com/api/v10/users/@me',{headers:{Autho
 if(!/^\d{15,22}$/.test(user.id))throw Error('Identidade Discord inválida');
 const uid='discord:'+user.id,displayName=(user.global_name||user.username).slice(0,100),fallback=Number((BigInt(user.id)>>22n)%6n),photoURL=user.avatar?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_')?'gif':'png'}?size=128`:`https://cdn.discordapp.com/embed/avatars/${fallback}.png`;
 try{const existing=await auth.getUser(uid);await auth.updateUser(uid,existing.providerData.some(p=>p.providerId==='password')?{photoURL}:{displayName,photoURL})}catch(e){if(e.code!=='auth/user-not-found')throw e;await auth.createUser({uid,displayName,photoURL})}
+await getDatabase().ref('tableSessionsPreview/aurality/acervoAccounts/'+uid).set({name:displayName.slice(0,80),discordId:user.id,photoURL,updatedAt:Date.now()}).catch(()=>{});
 const customToken=await auth.createCustomToken(uid),ticket=token();sessions.set(ticket,{customToken,profile:{uid,discordId:user.id,displayName,photoURL},expires:Date.now()+60000});
 return redirect(res,returnTo+'#discord_ticket='+ticket)}
 if(req.method==='POST'&&url.pathname==='/auth/discord/exchange'){
