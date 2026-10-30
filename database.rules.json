@@ -7773,6 +7773,9 @@
             },
             "originY": {
               ".validate": "(!data.exists() || newData.val() === data.val()) && newData.isNumber() && newData.val() >= -1550 && newData.val() <= 2450"
+            },
+            "claimedPiece": {
+              ".validate": "newData.isString() && newData.val().length <= 100 && (!data.exists() || newData.val() === data.val()) && root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).exists() && (root.child('tableSessionsPreview/aurality/acervoAssets').child(root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).child('assetId').isString()?root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).child('assetId').val():'__none__').child('characterId').val() === newData.parent().child('claimedToken').val() || root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).child('assetId').val() === 'token-'+newData.parent().child('claimedToken').val() || newData.parent().child('claimedToken').val() === 'npc-'+newData.val())"
             }
           }
         },
@@ -9868,6 +9871,9 @@
             },
             "claimedBy": {
               ".validate": "newData.isString() && (data.exists()?newData.val() === data.val():newData.val() === auth.uid)"
+            },
+            "claimedPiece": {
+              ".validate": "newData.isString() && newData.val().length <= 100 && (!data.exists() || newData.val() === data.val()) && root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).exists() && (root.child('tableSessionsPreview/aurality/acervoAssets').child(root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).child('assetId').isString()?root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).child('assetId').val():'__none__').child('characterId').val() === newData.parent().child('claimedToken').val() || root.child('tableSessionsPreview/aurality/acervoPieces').child(newData.val()).child('assetId').val() === 'token-'+newData.parent().child('claimedToken').val() || newData.parent().child('claimedToken').val() === 'npc-'+newData.val())"
             }
           }
         },
